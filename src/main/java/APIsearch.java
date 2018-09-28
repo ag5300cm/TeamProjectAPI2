@@ -1,6 +1,6 @@
 import javax.swing.*;
-import javafx.*;
-import java.awt.*;
+//import javafx.*;
+//import java.awt.*;
 
 
 /**
@@ -14,8 +14,7 @@ public class APIsearch extends JFrame {
     private JTextArea textArea1;
     private JLabel PIctureHere;
     private JPanel mainPanel;
-    private ImageIcon image1;
-    
+   // private ImageIcon image1;
 
 
     APIsearch() {
@@ -26,11 +25,11 @@ public class APIsearch extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        //ImageIcon image1 = new ImageIcon(getClass().getResource("WarAirplanes.jpg"));
-        //PIctureHere.setIcon(image1);
+        ImageIcon image1 = new ImageIcon(getClass().getResource("WarAirplanes.jpg"));
+        PIctureHere.setIcon(image1);
 
 
-        PIctureHere = new JLabel(getClass().getResource("WarAirplanes.jpg"));
-        add(PIctureHere);
+        //PIctureHere = new JLabel(getClass().getResource("WarAirplanes.jpg"));
+        //add(PIctureHere);
     }
 }
