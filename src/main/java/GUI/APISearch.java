@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 /**
@@ -14,19 +15,20 @@ public class APISearch extends JFrame {
     private JTextArea descriptionTextArea;
     private JLabel pictureLabel;
     private JPanel mainPanel;
-    private ImageIcon image1;
 
     public APISearch() {
 
         setContentPane(mainPanel);
+
+        // Will load image below this is what we used for testing, we will find a way to scale it.
+        ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg"));
+        //Image newImage1 = image1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);  // Did not quite work for scaling
+        pictureLabel.setIcon(image1);
+
         pack();
         //setSize(1600, 1000);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-
-        //ImageIcon image1 = new ImageIcon(getClass().getResource("WarAirplanes.jpg"));
-        //pictureLabel.setIcon(image1);
-
 
         //pictureLabel = new JLabel(getClass().getResource("WarAirplanes.jpg"));
         //add(pictureLabel);
