@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Blob;
 
 import DB.encyclopediaDB;
 /**
@@ -24,7 +25,7 @@ public class APISearch extends JFrame {
 
         // Will load image below this is what we used for testing  TODO Chage image1 to what is API searched
         ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg"));  // This gets the image saved in the program, will need to be relaced with API search
-        Image newImage1 = image1.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT);  // Did work for scaling, Change image size here
+        Image newImage1 = image1.getImage().getScaledInstance(480, 480, Image.SCALE_DEFAULT);  // Did work for scaling, Change image size here
         ImageIcon imageIcon = new ImageIcon(newImage1);  // Changing back to imageIcon so it will work with Jlabel
         pictureLabel.setIcon(imageIcon);  // Setting image on GUI
 
@@ -43,21 +44,36 @@ public class APISearch extends JFrame {
     private void configureEventHandlers() {
 
 
-        //TODO EVENT HANDLER TO HANDLE SEARCH BUTTON
-
-
-        //TODO EVENT HANDLER TO HANDLE SAVE BUTTON
-        saveButton.addActionListener(new ActionListener() {
+        //EVENT HANDLER TO HANDLE SEARCH BUTTON
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table
+                String searchText = searchTextField.getText();
+                // TODO use searchText for API usages and get info back
 
             }
         });
 
 
-        //TODO EVENT HANDLER TO HANDLE EXIT BUTTON
+        // EVENT HANDLER TO HANDLE SAVE BUTTON
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String searchText = searchTextField.getText();
+                //Blob saveMePic = pictureLabel.getIcon() ;   //Todo attach API search data for Image Here Please
+                String textData = descriptionTextArea.getText();
+
+
+                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table
+                // TODO work on connecting data to database
+
+            }
+        });
+
+
+        // EVENT HANDLER TO HANDLE EXIT BUTTON
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
