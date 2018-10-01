@@ -44,6 +44,11 @@ public class encyclopediaDB {
             Statement statementCT = conn.createStatement();
             statementCT.execute(sqlCreateTable);
 
+
+
+            // TODO INSERT SUBJECT INFORMATION INTO TABLE
+
+
         } catch (SQLException e) {
             System.out.print(e.getMessage());
         }finally {
@@ -57,9 +62,7 @@ public class encyclopediaDB {
         };
 
 
-        // Extra QUERY THE DATABASE FOR SUBJECT INFORMATION
-
-        // TODO INSERT SUBJECT INFORMATION INTO TABLE
+        // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
 
         // Extra DELETE SUBJECT INFORMATION FROM TABLE
     }
