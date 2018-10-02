@@ -9,11 +9,11 @@ public class DescriptionAPI {
         // https://en.wikipedia.org/w/api.php
 
         // http://en.wikipedia.org/w/api.php?action=query&titles=Stackoverflow
-        // TODO GET BACK A JSON FILE
+        // TODO GET BACK A JSON OBJECT
 
 
 
-        // TODO USE JSON FILE TO RETRIEVE SUBJECT DESC
+        // TODO USE JSON TO RETRIEVE SUBJECT DESC
 
     }
 
