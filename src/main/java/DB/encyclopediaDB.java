@@ -38,7 +38,7 @@ public class encyclopediaDB {
             String tableName = "MyTable";  // Change table name here
             String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName
                     + " (SearchWord  CHAR(40),"  // Todo Should Char be TEXT ????,, Should A "\n" be at the end of each one???
-                    + "  TextInfo    CHAR(2000),"  // Increase Number here to hold more wiki data
+                    + "  TextInfo    VARCHAR(5000),"  // Increase Number here to hold more wiki data
                     + "  Picture     BLOB )";
 
             Statement statementCT = conn.createStatement();
