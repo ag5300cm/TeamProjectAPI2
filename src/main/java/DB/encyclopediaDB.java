@@ -10,19 +10,19 @@ import java.sql.ResultSet; // for returning data, I believe
 
 public class encyclopediaDB {
 
-    //static Connection conn = null;
+    static Connection conn = null;
 
-//    public static Connection connect() {
-//        try {
-//            Class.forName("org.sqlite.JDBC");
-//            conn = DriverManager.getConnection("jdbc:sqlite:test:db");
-//            System.out.print("DB connected");
-//            return conn;
-//        } catch (SQLException e) {
-//            e.printStackTrace(System.out);
-//            return null;
-//        }
-//    }
+    public static Connection connect() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:test:db");  // Using driver Manager to connect to database
+            System.out.print("DB connected");  // letting me know connect, can delete later
+            return conn;
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
 
     public static void ConnectAndCreateTable() {
 
@@ -30,9 +30,10 @@ public class encyclopediaDB {
         Connection conn = null;
         try {
             //Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:test:db";
-            conn = DriverManager.getConnection(url);
-            System.out.print("DB connected");
+            //String url = "jdbc:sqlite:test:db";
+            //conn = DriverManager.getConnection(url);
+            conn = connect();
+            //System.out.print("DB connected");
 
             // CREATE TABLE IF NOT EXIT
             String tableName = "MyTable";  // Change table name here
@@ -41,13 +42,12 @@ public class encyclopediaDB {
                     + "  TextInfo    VARCHAR(5000),"  // Increase Number here to hold more wiki data
                     + "  Picture     BLOB )";
 
-            Statement statementCT = conn.createStatement();
-            statementCT.execute(sqlCreateTable);
-
-
-
-            // TODO INSERT SUBJECT INFORMATION INTO TABLE
-
+            try {
+                Statement statementCT = conn.createStatement();
+                statementCT.execute(sqlCreateTable);
+            }catch (NullPointerException npe) {
+                System.out.println("Error : " + npe);
+            }
 
         } catch (SQLException e) {
             System.out.print(e.getMessage());
@@ -61,6 +61,8 @@ public class encyclopediaDB {
             }
         };
 
+
+        // TODO INSERT SUBJECT INFORMATION INTO TABLE
 
         // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
 
