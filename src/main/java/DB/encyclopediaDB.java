@@ -19,7 +19,7 @@ public class encyclopediaDB {
             System.out.print("DB connected");  // letting me know connect, can delete later
             return conn;
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.out);  // Incase it breaks down will lead me to the problem
             return null;
         }
     }
@@ -43,15 +43,15 @@ public class encyclopediaDB {
                     + "  Picture     BLOB )";
 
             try {
-                Statement statementCT = conn.createStatement();
-                statementCT.execute(sqlCreateTable);
+                Statement statementCT = conn.createStatement();  // Creating a blank statement, can be added to
+                statementCT.execute(sqlCreateTable);  // adding to blank statement and executing it (or making table)
             }catch (NullPointerException npe) {
                 System.out.println("Error : " + npe);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException e) {  // Yo in case its broke
             System.out.print(e.getMessage());
-        }finally {
+        }finally {  // Should close the connection
             try {
                 if (conn != null) {
                     conn.close();
@@ -60,7 +60,6 @@ public class encyclopediaDB {
                 System.out.println(ex.getMessage());
             }
         };
-
 
         // TODO INSERT SUBJECT INFORMATION INTO TABLE
 
