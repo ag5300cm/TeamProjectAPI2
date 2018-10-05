@@ -1,16 +1,11 @@
 package DB;
 
 
-import java.sql.Connection;  // could use import java.sql.*; for everything
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import java.sql.ResultSet; // for returning data, I believe
+import java.sql.*;
 
 public class encyclopediaDB {
 
-    static Connection conn = null;
+    public static Connection conn = null;
 
     public static Connection connect() {
         try {
@@ -27,7 +22,7 @@ public class encyclopediaDB {
     public static void ConnectAndCreateTable() {
 
         // MAKE CONNECTION TO DATABASE
-        Connection conn = null;
+        conn = null;
         try {
             //Class.forName("org.sqlite.JDBC");
             //String url = "jdbc:sqlite:test:db";
@@ -60,13 +55,33 @@ public class encyclopediaDB {
                 System.out.println(ex.getMessage());
             }
         };
-
-        // TODO INSERT SUBJECT INFORMATION INTO TABLE
-
-        // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
-
-        // Extra DELETE SUBJECT INFORMATION FROM TABLE
     }
+
+    // TODO INSERT SUBJECT INFORMATION INTO TABLE
+    public static void saveButtonPressed(String searchTerm, String textInfoAPI, Blob pictureToSave) {
+
+        conn = null;
+        String tableName = "MyTable";  // Change table name here
+        try {
+            conn = connect();
+            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
+                    " VALUES(?,?,?)";
+
+            PreparedStatement prepAndGo = conn.prepareStatement(saveMeData);
+            prepAndGo.setString(1, searchTerm);
+            prepAndGo.setString(2, textInfoAPI);
+            prepAndGo.setBlob(3, pictureToSave);
+            prepAndGo.executeUpdate();
+
+        } catch (Exception eee) {
+            System.out.print("Couldn't Save: " + eee);
+        }
+    }
+
+    // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
+
+    // Extra DELETE SUBJECT INFORMATION FROM TABLE
+
 
 }
 
