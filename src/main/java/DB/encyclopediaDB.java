@@ -1,6 +1,7 @@
 package DB;
 
 
+import javax.swing.*;
 import java.sql.*;
 
 public class encyclopediaDB {
@@ -58,10 +59,11 @@ public class encyclopediaDB {
     }
 
     // TODO INSERT SUBJECT INFORMATION INTO TABLE
-    public static void saveButtonPressed(String searchTerm, String textInfoAPI, Blob pictureToSave) {
+    public static void saveButtonPressed(String searchTerm, String textInfoAPI, Icon pictureToSave) {
 
         conn = null;
         String tableName = "MyTable";  // Change table name here
+        //Blob pictureSave = pictureToSave;  //TODO change Icon or ImageIcon to Blob
         try {
             conn = connect();
             String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
@@ -70,7 +72,7 @@ public class encyclopediaDB {
             PreparedStatement prepAndGo = conn.prepareStatement(saveMeData);
             prepAndGo.setString(1, searchTerm);
             prepAndGo.setString(2, textInfoAPI);
-            prepAndGo.setBlob(3, pictureToSave);
+            //prepAndGo.setBlob(3, pictureSave);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();
 
         } catch (Exception eee) {
