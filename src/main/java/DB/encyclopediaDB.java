@@ -1,7 +1,11 @@
 package DB;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.*;
 
 public class encyclopediaDB {
@@ -72,7 +76,24 @@ public class encyclopediaDB {
             PreparedStatement prepAndGo = conn.prepareStatement(saveMeData);
             prepAndGo.setString(1, searchTerm);
             prepAndGo.setString(2, textInfoAPI);
-            //prepAndGo.setBlob(3, pictureSave);  //  TODO find a way to put blob here
+
+            ByteArrayOutputStream baos = null;  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
+            try {
+                baos = new ByteArrayOutputStream();
+                //Image image2 = new Image(("WarAirplanes.jpg"));
+                //ImageIcon picSaveMe = new ImageIcon(pictureToSave);
+                //ImageIO.write(picSaveMe, "jpg", baos);
+            } catch (Exception ex) {
+                System.out.print(ex);
+            } finally {
+                try {
+                    baos.close();
+                } catch (Exception e) {
+                }
+            }
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+            prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();
 
         } catch (Exception eee) {

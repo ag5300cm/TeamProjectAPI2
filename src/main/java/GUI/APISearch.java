@@ -62,13 +62,14 @@ public class APISearch extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 String searchText = searchTextField.getText();
+                ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg"));
                 Icon saveMePic = pictureLabel.getIcon() ;   //Todo attach API search data for Image Here Please
                 String textData = descriptionTextArea.getText();
 
 
-                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table
+                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table TODO move this elsewhere does not need to create DB and table everytime
                 // TODO work on connecting data to database
-                encyclopediaDB.saveButtonPressed(searchText, textData, saveMePic );
+                encyclopediaDB.saveButtonPressed(searchText, textData, image1);
 
             }
         });
