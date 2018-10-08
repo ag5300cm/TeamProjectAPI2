@@ -109,7 +109,9 @@ public class encyclopediaDB {
     }
 
     // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
-    public static boolean searchButtonPressed(String searchTerm) {
+    public static String searchButtonPressed(String searchTerm) {
+
+        String returnMeString = "";
 
         try {
             conn = connect();
@@ -122,6 +124,10 @@ public class encyclopediaDB {
                 String TextInfoPrintMe = rs.getString("TextInfo");
                 //Blob picturePrintMe = rs.getBlob("Picture");
 
+                if (searchTerm.equalsIgnoreCase(searchTermPrintMe)) {
+                    returnMeString = TextInfoPrintMe;
+                }
+
                 System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);  // This should print of the info to show table working, can delete later
             }
 
@@ -130,7 +136,7 @@ public class encyclopediaDB {
             sqlE.printStackTrace(System.out);
         }
 
-        return true; // TODO change to something else later
+        return returnMeString; // TODO change to something else later
     }
 
     // Extra DELETE SUBJECT INFORMATION FROM TABLE

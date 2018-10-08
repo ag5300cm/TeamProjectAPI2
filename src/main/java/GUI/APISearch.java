@@ -51,7 +51,8 @@ public class APISearch extends JFrame {
 
                 String searchText = searchTextField.getText();
                 // TODO use searchText for API usages and get info back
-                encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
+                String displayText = encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
+                descriptionTextArea.setText(displayText);
 
             }
         });
