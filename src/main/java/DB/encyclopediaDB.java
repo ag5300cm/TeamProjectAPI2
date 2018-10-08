@@ -16,7 +16,7 @@ public class encyclopediaDB {
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:test:db");  // Using driver Manager to connect to database
-            System.out.print("DB connected");  // letting me know connect, can delete later
+            //System.out.print("DB connected");  // letting me know connect, can delete later
             return conn;
         } catch (Exception e) {
             e.printStackTrace(System.out);  // Incase it breaks down will lead me to the problem
@@ -85,23 +85,50 @@ public class encyclopediaDB {
                 //ImageIO.write(picSaveMe, "jpg", baos);
             } catch (Exception ex) {
                 System.out.print(ex);
+                ex.printStackTrace(System.out);
             } finally {
                 try {
                     baos.close();
                 } catch (Exception e) {
+                    e.printStackTrace(System.out);
                 }
             }
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
             prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();
+            conn.close();
 
         } catch (Exception eee) {
             System.out.print("Couldn't Save: " + eee);
+            eee.printStackTrace(System.out);
         }
     }
 
     // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
+    public static boolean searchButtonPressed(String searchTerm) {
+
+        try {
+            conn = connect();
+            String query = "SELECT * FROM Mytable";
+            Statement statementSQL = conn.createStatement();
+            ResultSet rs = statementSQL.executeQuery(query);
+
+            while (rs.next()) {
+                String searchTermPrintMe = rs.getString("SearchWord");
+                String TextInfoPrintMe = rs.getString("TextInfo");
+                //Blob picturePrintMe = rs.getBlob("Picture");
+
+                System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);
+            }
+
+            conn.close();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace(System.out);
+        }
+
+        return true; // TODO change to something else later
+    }
 
     // Extra DELETE SUBJECT INFORMATION FROM TABLE
 

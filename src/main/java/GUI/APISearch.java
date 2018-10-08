@@ -51,6 +51,7 @@ public class APISearch extends JFrame {
 
                 String searchText = searchTextField.getText();
                 // TODO use searchText for API usages and get info back
+                encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
 
             }
         });
@@ -62,8 +63,8 @@ public class APISearch extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 String searchText = searchTextField.getText();
-                ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg"));
-                Icon saveMePic = pictureLabel.getIcon() ;   //Todo attach API search data for Image Here Please
+                ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg")); /// used for testing and failed.
+                Icon saveMePic = pictureLabel.getIcon() ;   //Todo attach API search data for Image Here Please, maybe change to ImageIcon or other thing
                 String textData = descriptionTextArea.getText();
 
 
