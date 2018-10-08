@@ -61,7 +61,7 @@ public class encyclopediaDB {
     }
 
     // TODO INSERT Picture INTO TABLE if possible
-    public static void saveButtonPressed(String searchTerm, String textInfoAPI, Icon pictureToSave) {
+    public static void saveButtonPressed(String searchTerm, String textInfoAPI, ImageIcon pictureToSave) {
 
         conn = null;
         String tableName = "MyTable";  // Change table name here
@@ -79,26 +79,14 @@ public class encyclopediaDB {
             prepAndGo.setString(1, searchTerm);  // Setting each variable
             prepAndGo.setString(2, textInfoAPI);
 
-            ByteArrayOutputStream baos = null;  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
-            try {
-                baos = new ByteArrayOutputStream();
-                //Image image2 = new Image(("WarAirplanes.jpg"));
-                //ImageIcon picSaveMe = new ImageIcon(pictureToSave);
-                //ImageIO.write(picSaveMe, "jpg", baos);
-            } catch (Exception ex) {
-                System.out.print(ex);
-                ex.printStackTrace(System.out);
-            } finally {
-                try {
-                    baos.close();
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                }
-            }
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            bais = null;
 
-            //prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
+            // TODO find way to save images.
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
+
+
+
+            //prepAndGo.setBlob(3, pictureToSave);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();  // Inserting in to table
             conn.close();  // ending connection like good proper etiquette, gonna' have tea now.
 
