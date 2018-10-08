@@ -29,16 +29,14 @@ public class encyclopediaDB {
         // MAKE CONNECTION TO DATABASE
         conn = null;
         try {
-            //Class.forName("org.sqlite.JDBC");
-            //String url = "jdbc:sqlite:test:db";
-            //conn = DriverManager.getConnection(url);
-            conn = connect();
-            //System.out.print("DB connected");
+
+            conn = connect();  // getting connection method
+            //System.out.print("DB connected");  // used for testing
 
             // CREATE TABLE IF NOT EXIT
             String tableName = "MyTable";  // Change table name here
             String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName
-                    + " (SearchWord  CHAR(40),"  // Todo Should Char be TEXT ????,, Should A "\n" be at the end of each one???
+                    + " (SearchWord  CHAR(40),"  //  The word or words used to search will go in here.
                     + "  TextInfo    VARCHAR(5000),"  // Increase Number here to hold more wiki data
                     + "  Picture     BLOB )";
 
@@ -46,7 +44,7 @@ public class encyclopediaDB {
                 Statement statementCT = conn.createStatement();  // Creating a blank statement, can be added to
                 statementCT.execute(sqlCreateTable);  // adding to blank statement and executing it (or making table)
             }catch (NullPointerException npe) {
-                System.out.println("Error : " + npe);
+                System.out.println("Error : " + npe);  // Incase of connection or table creation problem
             }
 
         } catch (SQLException e) {  // Yo in case its broke
@@ -62,7 +60,7 @@ public class encyclopediaDB {
         };
     }
 
-    // TODO INSERT SUBJECT INFORMATION INTO TABLE
+    // TODO INSERT Picture INTO TABLE if possible
     public static void saveButtonPressed(String searchTerm, String textInfoAPI, Icon pictureToSave) {
 
         conn = null;
@@ -70,13 +68,15 @@ public class encyclopediaDB {
         //Blob pictureSave = pictureToSave;  //TODO change Icon or ImageIcon to Blob
         try {
             conn = connect();
+            // Below is what to use if can insert picture into table
 //            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
 //                    " VALUES(?,?,?)";
+            // Current string only inserts Search term and searched texted
             String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo) " +
                     " VALUES(?,?)";
 
-            PreparedStatement prepAndGo = conn.prepareStatement(saveMeData);
-            prepAndGo.setString(1, searchTerm);
+            PreparedStatement prepAndGo = conn.prepareStatement(saveMeData); // Making a statement to go in the table
+            prepAndGo.setString(1, searchTerm);  // Setting each variable
             prepAndGo.setString(2, textInfoAPI);
 
             ByteArrayOutputStream baos = null;  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
@@ -99,33 +99,34 @@ public class encyclopediaDB {
             bais = null;
 
             //prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
-            prepAndGo.executeUpdate();
-            conn.close();
+            prepAndGo.executeUpdate();  // Inserting in to table
+            conn.close();  // ending connection like good proper etiquette, gonna' have tea now.
 
         } catch (Exception eee) {
             System.out.print("Couldn't Save: " + eee);
-            eee.printStackTrace(System.out);
+            eee.printStackTrace(System.out);  // Helping me find the problem
         }
     }
 
-    // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
+    // QUERY THE DATABASE FOR SUBJECT INFORMATION
     public static String searchButtonPressed(String searchTerm) {
 
-        String returnMeString = "";
+        String returnMeString = "";  // This should cause it to return blank if no match found, then API search can do there thing.
 
         try {
-            conn = connect();
-            String query = "SELECT * FROM Mytable";
-            Statement statementSQL = conn.createStatement();
-            ResultSet rs = statementSQL.executeQuery(query);
+            conn = connect();  // Making a connection and connection variable
+            String query = "SELECT * FROM Mytable";  // Having a statment that will search the whole database,
+            // could make it SearchWord instead of *, but then would need research if a match would be made.
+            Statement statementSQL = conn.createStatement(); // Preparing a blank statement
+            ResultSet rs = statementSQL.executeQuery(query);  // getting a result set from the sqlite database
 
-            while (rs.next()) {
+            while (rs.next()) {  // Going through the result set line by line
                 String searchTermPrintMe = rs.getString("SearchWord");
                 String TextInfoPrintMe = rs.getString("TextInfo");
                 //Blob picturePrintMe = rs.getBlob("Picture");
 
-                if (searchTerm.equalsIgnoreCase(searchTermPrintMe)) {
-                    returnMeString = TextInfoPrintMe;
+                if (searchTerm.equalsIgnoreCase(searchTermPrintMe)) {  // seeing if it matches the current search term
+                    returnMeString = TextInfoPrintMe;  // If match, will get previous data
                 }
 
                 System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);  // This should print of the info to show table working, can delete later
@@ -133,10 +134,10 @@ public class encyclopediaDB {
 
             conn.close();
         } catch (SQLException sqlE) {
-            sqlE.printStackTrace(System.out);
+            sqlE.printStackTrace(System.out);  // To help me find the problem
         }
 
-        return returnMeString; // TODO change to something else later
+        return returnMeString; // returning text data, will have to change to tuple of can get picture working.
     }
 
     // Extra DELETE SUBJECT INFORMATION FROM TABLE

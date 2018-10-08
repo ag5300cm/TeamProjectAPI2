@@ -34,11 +34,7 @@ public class APISearch extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        //pictureLabel = new JLabel(getClass().getResource("WarAirplanes.jpg"));
-        //add(pictureLabel);
-
         configureEventHandlers();
-
     }
 
     private void configureEventHandlers() {
@@ -49,10 +45,9 @@ public class APISearch extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String searchText = searchTextField.getText();
-                // TODO use searchText for API usages and get info back
+                String searchText = searchTextField.getText(); // Getting the input text
                 String displayText = encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
-                descriptionTextArea.setText(displayText);
+                descriptionTextArea.setText(displayText);  // Making the data already searched and saved displayed
 
             }
         });
@@ -68,10 +63,10 @@ public class APISearch extends JFrame {
                 Icon saveMePic = pictureLabel.getIcon() ;   //Todo attach API search data for Image Here Please, maybe change to ImageIcon or other thing
                 String textData = descriptionTextArea.getText();
 
+                // TODO move this elsewhere does not need to create DB and table everytime
+                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table
 
-                encyclopediaDB.ConnectAndCreateTable();  // Will create database if not already made, same with table TODO move this elsewhere does not need to create DB and table everytime
-                // TODO work on connecting data to database
-                encyclopediaDB.saveButtonPressed(searchText, textData, image1);
+                encyclopediaDB.saveButtonPressed(searchText, textData, image1);  // Can currently save two out of three
 
             }
         });
