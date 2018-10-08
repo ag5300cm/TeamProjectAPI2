@@ -70,8 +70,10 @@ public class encyclopediaDB {
         //Blob pictureSave = pictureToSave;  //TODO change Icon or ImageIcon to Blob
         try {
             conn = connect();
-            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
-                    " VALUES(?,?,?)";
+//            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
+//                    " VALUES(?,?,?)";
+            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo) " +
+                    " VALUES(?,?)";
 
             PreparedStatement prepAndGo = conn.prepareStatement(saveMeData);
             prepAndGo.setString(1, searchTerm);
@@ -94,8 +96,9 @@ public class encyclopediaDB {
                 }
             }
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            bais = null;
 
-            prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
+            //prepAndGo.setBlob(3, bais);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();
             conn.close();
 
@@ -119,7 +122,7 @@ public class encyclopediaDB {
                 String TextInfoPrintMe = rs.getString("TextInfo");
                 //Blob picturePrintMe = rs.getBlob("Picture");
 
-                System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);
+                System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);  // This should print of the info to show table working, can delete later
             }
 
             conn.close();
