@@ -1,12 +1,17 @@
 package DB;
 
+import GUI.APISearch;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.sql.*;
+
+
 
 public class encyclopediaDB {
 
@@ -81,12 +86,19 @@ public class encyclopediaDB {
 
 
             // TODO find way to save images.
-
+            //https://stackoverflow.com/questions/29679227/how-to-get-bytearray-from-jlabel-icon  might be on to something here
             ByteArrayOutputStream stream = new ByteArrayOutputStream();  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
+            File f = new File("WarAirplanes.jpg");
+            BufferedImage bImage = ImageIO.read(f);
+            ImageIO.write(bImage, "jpg", stream);
+            byte[] imageInByte = stream.toByteArray();
+
+//            Icon icon = label.getIcon();
+//            BufferedImage image = new BufferedImage(icon.getIconWidth(),
+//                    icon.getIconHeight(),BufferedImage.TYPE_INT_RGB);
 
 
-
-            //prepAndGo.setBlob(3, pictureToSave);  //  TODO find a way to put blob here
+            //prepAndGo.setBlob(3, imageInByte);  //  TODO find a way to put blob here
             prepAndGo.executeUpdate();  // Inserting in to table
             conn.close();  // ending connection like good proper etiquette, gonna' have tea now.
 
