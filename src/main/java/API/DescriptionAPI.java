@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import org.json.JSONObject;
 
 public class DescriptionAPI {
@@ -11,7 +12,7 @@ public class DescriptionAPI {
     public static void main(String[] args) {
 
         try {
-            String searchText = "candy";
+            String searchText = "moon";
 
             String urlString = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + searchText;
 
@@ -22,6 +23,8 @@ public class DescriptionAPI {
             con.setRequestMethod("GET");
 
             int responseCode = con.getResponseCode();
+
+            System.out.println(urlObject);
 
             if(responseCode == 200 || responseCode == 201) {
 
@@ -36,11 +39,18 @@ public class DescriptionAPI {
                     response.append(inputLine);
                 }
 
-                //System.out.println(response.toString());
-
                 // Read JSON response and retrieve subject's description
                 JSONObject json = new JSONObject(response.toString());
-                System.out.println("Description: " + json.getJSONObject("query").getJSONObject("pages").getJSONObject("61230").getString("extract"));
+
+                Iterator<String> keys = json.getJSONObject("query").getJSONObject("pages").keys();
+
+                String key ="";
+
+                if(keys.hasNext()){
+                    key = keys.next(); // First key in your json object
+                }
+
+                System.out.println("Description: " + json.getJSONObject("query").getJSONObject("pages").getJSONObject(key).getString("extract"));
 
                 in.close();
             }
