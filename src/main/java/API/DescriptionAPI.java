@@ -52,6 +52,7 @@ public class DescriptionAPI {
                     key = keys.next(); // First key in your json object
                 }
 
+                //TODO check if the string is empty, if empty notify user with a message
                 description = json.getJSONObject("query").getJSONObject("pages").getJSONObject(key).getString("extract").replaceAll("\n", " ");
 
                 in.close();
