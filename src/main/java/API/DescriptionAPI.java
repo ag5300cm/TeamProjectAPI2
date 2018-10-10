@@ -9,12 +9,14 @@ import org.json.JSONObject;
 
 public class DescriptionAPI {
 
-    public static void main(String[] args) {
+    public static String getDescriptionOfSubject(String searchText) {
+
+        String description = "";
 
         try {
-            String searchText = "moon";
 
-            String urlString = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=" + searchText;
+            String urlString = "https://en.wikipedia.org/w/api.php?format=json&action=query" +
+                    "&prop=extracts&exintro=&explaintext=&titles=" + searchText;
 
             URL urlObject = new URL(urlString);
 
@@ -44,13 +46,13 @@ public class DescriptionAPI {
 
                 Iterator<String> keys = json.getJSONObject("query").getJSONObject("pages").keys();
 
-                String key ="";
+                String key = "";
 
                 if(keys.hasNext()){
                     key = keys.next(); // First key in your json object
                 }
 
-                System.out.println("Description: " + json.getJSONObject("query").getJSONObject("pages").getJSONObject(key).getString("extract"));
+                description = json.getJSONObject("query").getJSONObject("pages").getJSONObject(key).getString("extract").replaceAll("\n", " ");
 
                 in.close();
             }
@@ -63,6 +65,7 @@ public class DescriptionAPI {
             ex.printStackTrace();
         }
 
+        return description;
     }
 
 }
