@@ -1,57 +1,60 @@
 package DB;
 
+import GUI.APISearch;
 
-import java.sql.Connection;  // could use import java.sql.*; for everything
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.sql.*;
 
-import java.sql.ResultSet; // for returning data, I believe
+
 
 public class encyclopediaDB {
 
-    //static Connection conn = null;
+    public static Connection conn = null;
 
-//    public static Connection connect() {
-//        try {
-//            Class.forName("org.sqlite.JDBC");
-//            conn = DriverManager.getConnection("jdbc:sqlite:test:db");
-//            System.out.print("DB connected");
-//            return conn;
-//        } catch (SQLException e) {
-//            e.printStackTrace(System.out);
-//            return null;
-//        }
-//    }
+    public static Connection connect() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:test:db");  // Using driver Manager to connect to database
+            //System.out.print("DB connected");  // letting me know connect, can delete later
+            return conn;
+        } catch (Exception e) {
+            e.printStackTrace(System.out);  // Incase it breaks down will lead me to the problem
+            return null;
+        }
+    }
 
     public static void ConnectAndCreateTable() {
 
         // MAKE CONNECTION TO DATABASE
-        Connection conn = null;
+        conn = null;
         try {
-            //Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:test:db";
-            conn = DriverManager.getConnection(url);
-            System.out.print("DB connected");
+
+            conn = connect();  // getting connection method
+            //System.out.print("DB connected");  // used for testing
 
             // CREATE TABLE IF NOT EXIT
             String tableName = "MyTable";  // Change table name here
             String sqlCreateTable = "CREATE TABLE IF NOT EXISTS " + tableName
-                    + " (SearchWord  CHAR(40),"  // Todo Should Char be TEXT ????,, Should A "\n" be at the end of each one???
-                    + "  TextInfo    CHAR(2000),"  // Increase Number here to hold more wiki data
+                    + " (SearchWord  CHAR(40),"  //  The word or words used to search will go in here.
+                    + "  TextInfo    VARCHAR(5000),"  // Increase Number here to hold more wiki data
                     + "  Picture     BLOB )";
 
-            Statement statementCT = conn.createStatement();
-            statementCT.execute(sqlCreateTable);
+            try {
+                Statement statementCT = conn.createStatement();  // Creating a blank statement, can be added to
+                statementCT.execute(sqlCreateTable);  // adding to blank statement and executing it (or making table)
+            }catch (NullPointerException npe) {
+                System.out.println("Error : " + npe);  // Incase of connection or table creation problem
+            }
 
-
-
-            // TODO INSERT SUBJECT INFORMATION INTO TABLE
-
-
-        } catch (SQLException e) {
+        } catch (SQLException e) {  // Yo in case its broke
             System.out.print(e.getMessage());
-        }finally {
+        }finally {  // Should close the connection
             try {
                 if (conn != null) {
                     conn.close();
@@ -60,12 +63,85 @@ public class encyclopediaDB {
                 System.out.println(ex.getMessage());
             }
         };
-
-
-        // TODO QUERY THE DATABASE FOR SUBJECT INFORMATION
-
-        // Extra DELETE SUBJECT INFORMATION FROM TABLE
     }
+
+    // TODO INSERT Picture INTO TABLE if possible
+    public static void saveButtonPressed(String searchTerm, String textInfoAPI, ImageIcon pictureToSave) {
+
+        conn = null;
+        String tableName = "MyTable";  // Change table name here
+        //Blob pictureSave = pictureToSave;  //TODO change Icon or ImageIcon to Blob
+        try {
+            conn = connect();
+            // Below is what to use if can insert picture into table
+//            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo, Picture) " +
+//                    " VALUES(?,?,?)";
+            // Current string only inserts Search term and searched texted
+            String saveMeData = "INSERT INTO " + tableName + " (SearchWord, TextInfo) " +
+                    " VALUES(?,?)";
+
+            PreparedStatement prepAndGo = conn.prepareStatement(saveMeData); // Making a statement to go in the table
+            prepAndGo.setString(1, searchTerm);  // Setting each variable
+            prepAndGo.setString(2, textInfoAPI);
+
+
+            // TODO find way to save images.
+            //https://stackoverflow.com/questions/29679227/how-to-get-bytearray-from-jlabel-icon  might be on to something here
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();  //https://stackoverflow.com/questions/20961065/converting-image-in-memory-to-a-blob  (Code from)
+            File f = new File("WarAirplanes.jpg");
+            BufferedImage bImage = ImageIO.read(f);
+            ImageIO.write(bImage, "jpg", stream);
+            byte[] imageInByte = stream.toByteArray();
+
+//            Icon icon = label.getIcon();
+//            BufferedImage image = new BufferedImage(icon.getIconWidth(),
+//                    icon.getIconHeight(),BufferedImage.TYPE_INT_RGB);
+
+
+            //prepAndGo.setBlob(3, imageInByte);  //  TODO find a way to put blob here
+            prepAndGo.executeUpdate();  // Inserting in to table
+            conn.close();  // ending connection like good proper etiquette, gonna' have tea now.
+
+        } catch (Exception eee) {
+            System.out.print("Couldn't Save: " + eee);
+            eee.printStackTrace(System.out);  // Helping me find the problem
+        }
+    }
+
+    // QUERY THE DATABASE FOR SUBJECT INFORMATION
+    public static String searchButtonPressed(String searchTerm) {
+
+        String returnMeString = "";  // This should cause it to return blank if no match found, then API search can do there thing.
+
+        try {
+            conn = connect();  // Making a connection and connection variable
+            String query = "SELECT * FROM Mytable";  // Having a statment that will search the whole database,
+            // could make it SearchWord instead of *, but then would need research if a match would be made.
+            Statement statementSQL = conn.createStatement(); // Preparing a blank statement
+            ResultSet rs = statementSQL.executeQuery(query);  // getting a result set from the sqlite database
+
+            while (rs.next()) {  // Going through the result set line by line
+                String searchTermPrintMe = rs.getString("SearchWord");
+                String TextInfoPrintMe = rs.getString("TextInfo");
+                //Blob picturePrintMe = rs.getBlob("Picture");
+
+                if (searchTerm.equalsIgnoreCase(searchTermPrintMe)) {  // seeing if it matches the current search term
+                    returnMeString = TextInfoPrintMe;  // If match, will get previous data
+                }
+
+                System.out.print(searchTermPrintMe + "  " + TextInfoPrintMe);  // This should print of the info to show table working, can delete later
+            }
+
+            conn.close();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace(System.out);  // To help me find the problem
+        }
+
+        return returnMeString; // returning text data, will have to change to tuple of can get picture working.
+    }
+
+    // Extra DELETE SUBJECT INFORMATION FROM TABLE
+
 
 }
 
