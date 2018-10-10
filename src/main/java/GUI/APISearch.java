@@ -1,11 +1,16 @@
 package GUI;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.sql.Blob;
 
+import API.DescriptionAPI;
+import API.ImageAPI;
 import DB.encyclopediaDB;
 /**
  * Created by ag5300cm on 9/27/2018.
@@ -18,6 +23,7 @@ public class APISearch extends JFrame {
     private JTextArea descriptionTextArea;
     private JLabel pictureLabel;
     private JPanel mainPanel;
+    private JLabel subjectWikiUrlLabel;
 
     public APISearch() {
 
@@ -30,7 +36,7 @@ public class APISearch extends JFrame {
         pictureLabel.setIcon(imageIcon);  // Setting image on GUI
 
         pack();
-        //setSize(1600, 1000);
+        setSize(1600, 1000);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
@@ -45,9 +51,32 @@ public class APISearch extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String searchText = searchTextField.getText(); // Getting the input text
-                String displayText = encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
-                descriptionTextArea.setText(displayText);  // Making the data already searched and saved displayed
+                try {
+
+                    String searchText = searchTextField.getText(); // Getting the input text
+
+                    //TODO DB method to check if searchText is in table
+                    // Return Subject object if searchText is in table
+                    // Otherwise return 0
+                        // If 0 call APIs
+
+//                  String displayText = encyclopediaDB.searchButtonPressed(searchText);  // used to check if already searched.
+//                  descriptionTextArea.setText(displayText);  // Making the data already searched and saved displayed
+
+                    //TODO set picture to pictureLabel
+//                  String imageUrl = ImageAPI.getImageOfSubject(searchText);
+//                  pictureLabel.setIcon();
+
+                    descriptionTextArea.setText(DescriptionAPI.getDescriptionOfSubject(searchText));
+
+                    String urlString = "https://en.wikipedia.org/wiki/" + searchText;
+
+                    //TODO make urlString a hyperlink to wiki page
+                    subjectWikiUrlLabel.setText("Read more about " + searchText + " on Wikipedia: " + urlString);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -57,6 +86,9 @@ public class APISearch extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                //TODO create a subject object
+                // Subject subject = new Subject(searchText, imageUrl, subjectDescription)
 
                 String searchText = searchTextField.getText();
                 ImageIcon image1 = new ImageIcon(("WarAirplanes.jpg")); /// used for testing and failed.
