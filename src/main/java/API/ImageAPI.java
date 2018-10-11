@@ -19,7 +19,7 @@ public class ImageAPI {
 
             String API_KEY = System.getenv("API_KEY");
 
-            String urlString = "https://pixabay.com/api/?key=" + API_KEY + "=" + searchText + "&image_type=photo";
+            String urlString = "https://pixabay.com/api/?key=" + API_KEY + "&q=" + searchText + "&image_type=photo";
 
             URL urlObject = new URL(urlString);
 
@@ -45,7 +45,7 @@ public class ImageAPI {
                 JSONObject json = new JSONObject(response.toString());
 
                 JSONArray jsonarr = json.getJSONArray("hits");
-                address = jsonarr.getJSONObject(0).getString("largeImageURL");
+                address = jsonarr.getJSONObject(0).getString("previewURL");
 
                 in.close();
 

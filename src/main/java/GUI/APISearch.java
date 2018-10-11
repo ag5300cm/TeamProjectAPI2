@@ -6,7 +6,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Blob;
 
 import API.DescriptionAPI;
@@ -64,11 +69,20 @@ public class APISearch extends JFrame {
 //                  descriptionTextArea.setText(displayText);  // Making the data already searched and saved displayed
 
                     //TODO set picture to pictureLabel
-//                  String imageUrl = ImageAPI.getImageOfSubject(searchText);
+                  String imageUrl = ImageAPI.getImageOfSubject(searchText);
 //                  pictureLabel.setIcon();
-
-                    descriptionTextArea.setText(DescriptionAPI.getDescriptionOfSubject(searchText));
-
+                    URL url=new URL(imageUrl);
+                    try {
+//                    URLConnection conn = url.openConnection();
+                        BufferedImage c = ImageIO.read(url);
+                        ImageIcon newImage = new ImageIcon(c);
+                        pictureLabel.setIcon(newImage);
+                        descriptionTextArea.setText(DescriptionAPI.getDescriptionOfSubject(searchText));
+                    }catch (MalformedURLException c){
+                        c.printStackTrace();
+                    }catch (IOException c){
+                        c.printStackTrace();
+                    }
                     String urlString = "https://en.wikipedia.org/wiki/" + searchText;
 
                     //TODO make urlString a hyperlink to wiki page
